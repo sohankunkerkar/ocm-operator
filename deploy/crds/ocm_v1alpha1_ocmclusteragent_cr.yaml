@@ -3,5 +3,3 @@ kind: OCMClusterAgent
 metadata:
   name: example-ocmclusteragent
 spec:
-  # Add fields here
-  size: 3
