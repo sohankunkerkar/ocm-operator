@@ -1,5 +1,0 @@
-apiVersion: ocm.multicluster.com/v1alpha1
-kind: OCMClusterAgent
-metadata:
-  name: example-ocmclusteragent
-spec:

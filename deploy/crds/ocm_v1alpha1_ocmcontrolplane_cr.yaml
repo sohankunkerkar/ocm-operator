@@ -1,5 +1,0 @@
-apiVersion: ocm.multicluster.com/v1alpha1
-kind: OCMControlplane
-metadata:
-  name: example-ocmcontrolplane
-spec:
