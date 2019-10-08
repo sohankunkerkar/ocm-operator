@@ -2,7 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   creationTimestamp: null
-  name: ocm-operator
+  name: on-prem-operator
 rules:
 - apiGroups:
   - ""
@@ -35,15 +35,14 @@ rules:
 - apiGroups:
   - apps
   resourceNames:
-  - ocm-operator
+  - on-prem-operator
   resources:
   - deployments/finalizers
   verbs:
   - update
 - apiGroups:
-  - ocm.multicluster.com
+  - onprem.multicluster.com
   resources:
   - '*'
-  - ocmclusteragents
   verbs:
   - '*'

@@ -1,11 +1,11 @@
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: ocm-operator
+  name: on-prem-operator
 subjects:
 - kind: ServiceAccount
-  name: ocm-operator
+  name: on-prem-operator
 roleRef:
   kind: Role
-  name: ocm-operator
+  name: on-prem-operator
   apiGroup: rbac.authorization.k8s.io
