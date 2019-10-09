@@ -1,9 +1,9 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  name: hubclusters.onprem.multicluster.com
+  name: hubclusters.onprem.openshift.io
 spec:
-  group: onprem.multicluster.com
+  group: onprem.openshift.io
   names:
     kind: HubCluster
     listKind: HubClusterList

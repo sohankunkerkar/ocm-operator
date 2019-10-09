@@ -1,4 +1,4 @@
-apiVersion: onprem.multicluster.com/v1alpha1
+apiVersion: onprem.openshift.io/v1alpha1
 kind: HubCluster
 metadata:
   name: example-hubcluster

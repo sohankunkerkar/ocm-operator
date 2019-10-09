@@ -13,9 +13,9 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
-		"github.com/sohankunkerkar/on-prem-operator/pkg/apis/onprem/v1alpha1.HubCluster":       schema_pkg_apis_onprem_v1alpha1_HubCluster(ref),
-		"github.com/sohankunkerkar/on-prem-operator/pkg/apis/onprem/v1alpha1.HubClusterSpec":   schema_pkg_apis_onprem_v1alpha1_HubClusterSpec(ref),
-		"github.com/sohankunkerkar/on-prem-operator/pkg/apis/onprem/v1alpha1.HubClusterStatus": schema_pkg_apis_onprem_v1alpha1_HubClusterStatus(ref),
+		"github.com/sohankunkerkar/onprem-operator/pkg/apis/onprem/v1alpha1.HubCluster":       schema_pkg_apis_onprem_v1alpha1_HubCluster(ref),
+		"github.com/sohankunkerkar/onprem-operator/pkg/apis/onprem/v1alpha1.HubClusterSpec":   schema_pkg_apis_onprem_v1alpha1_HubClusterSpec(ref),
+		"github.com/sohankunkerkar/onprem-operator/pkg/apis/onprem/v1alpha1.HubClusterStatus": schema_pkg_apis_onprem_v1alpha1_HubClusterStatus(ref),
 	}
 }
 
@@ -46,19 +46,19 @@ func schema_pkg_apis_onprem_v1alpha1_HubCluster(ref common.ReferenceCallback) co
 					},
 					"spec": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("github.com/sohankunkerkar/on-prem-operator/pkg/apis/onprem/v1alpha1.HubClusterSpec"),
+							Ref: ref("github.com/sohankunkerkar/onprem-operator/pkg/apis/onprem/v1alpha1.HubClusterSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("github.com/sohankunkerkar/on-prem-operator/pkg/apis/onprem/v1alpha1.HubClusterStatus"),
+							Ref: ref("github.com/sohankunkerkar/onprem-operator/pkg/apis/onprem/v1alpha1.HubClusterStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/sohankunkerkar/on-prem-operator/pkg/apis/onprem/v1alpha1.HubClusterSpec", "github.com/sohankunkerkar/on-prem-operator/pkg/apis/onprem/v1alpha1.HubClusterStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/sohankunkerkar/onprem-operator/pkg/apis/onprem/v1alpha1.HubClusterSpec", "github.com/sohankunkerkar/onprem-operator/pkg/apis/onprem/v1alpha1.HubClusterStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 

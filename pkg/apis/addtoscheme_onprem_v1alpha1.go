@@ -1,7 +1,7 @@
 package apis
 
 import (
-	"github.com/sohankunkerkar/on-prem-operator/pkg/apis/onprem/v1alpha1"
+	"github.com/sohankunkerkar/onprem-operator/pkg/apis/onprem/v1alpha1"
 )
 
 func init() {

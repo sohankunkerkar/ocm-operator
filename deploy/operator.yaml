@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: on-prem-operator
+  name: onprem-operator
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: on-prem-operator
+      name: onprem-operator
   template:
     metadata:
       labels:
-        name: on-prem-operator
+        name: onprem-operator
     spec:
-      serviceAccountName: on-prem-operator
+      serviceAccountName: onprem-operator
       containers:
-        - name: on-prem-operator
+        - name: onprem-operator
           # Replace this with the built image name
           image: REPLACE_IMAGE
           command:
-          - on-prem-operator
+          - onprem-operator
           imagePullPolicy: Always
           env:
             - name: WATCH_NAMESPACE
@@ -30,4 +30,4 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
-              value: "on-prem-operator"
+              value: "onprem-operator"

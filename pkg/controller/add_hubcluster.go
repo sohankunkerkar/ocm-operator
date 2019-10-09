@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/sohankunkerkar/on-prem-operator/pkg/controller/hubcluster"
+	"github.com/sohankunkerkar/onprem-operator/pkg/controller/hubcluster"
 )
 
 func init() {
