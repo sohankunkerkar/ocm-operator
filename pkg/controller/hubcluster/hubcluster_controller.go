@@ -7,6 +7,7 @@ import (
 	mf "github.com/jcrossley3/manifestival"
 	"github.com/operator-framework/operator-sdk/pkg/predicate"
 	onpremv1alpha1 "github.com/sohankunkerkar/onprem-operator/pkg/apis/onprem/v1alpha1"
+	"github.com/sohankunkerkar/onprem-operator/version"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -130,9 +131,11 @@ func (r *ReconcileHubCluster) install(instance *onpremv1alpha1.HubCluster) error
 	}
 
 	// Update status
+	instance.Status.Version = version.Version
 	if err := r.client.Status().Update(context.TODO(), instance); err != nil {
 		return err
 	}
+	log.Info("Install succeeded", "version", version.Version)
 	resources, err := mf.Parse(*filename, *recursive)
 	if err == nil {
 		log.Info("Parsed the resources again for the next reconcile from: ", "path", *filename)
