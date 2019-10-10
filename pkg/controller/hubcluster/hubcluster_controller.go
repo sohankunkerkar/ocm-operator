@@ -8,7 +8,6 @@ import (
 	"github.com/operator-framework/operator-sdk/pkg/predicate"
 	onpremv1alpha1 "github.com/sohankunkerkar/onprem-operator/pkg/apis/onprem/v1alpha1"
 	"github.com/sohankunkerkar/onprem-operator/version"
-	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -55,15 +54,6 @@ func add(mgr manager.Manager, r reconcile.Reconciler) error {
 
 	// Watch for changes to primary resource HubCluster
 	err = c.Watch(&source.Kind{Type: &onpremv1alpha1.HubCluster{}}, &handler.EnqueueRequestForObject{}, predicate.GenerationChangedPredicate{})
-	if err != nil {
-		return err
-	}
-
-	// Watch for changes to secondary resource Pods and requeue the owner HubCluster
-	err = c.Watch(&source.Kind{Type: &corev1.Pod{}}, &handler.EnqueueRequestForOwner{
-		IsController: true,
-		OwnerType:    &onpremv1alpha1.HubCluster{},
-	})
 	if err != nil {
 		return err
 	}
