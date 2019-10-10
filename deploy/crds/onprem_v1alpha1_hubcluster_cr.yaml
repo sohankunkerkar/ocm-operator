@@ -2,4 +2,4 @@ apiVersion: onprem.openshift.io/v1alpha1
 kind: HubCluster
 metadata:
   name: example-hubcluster
-spec:
+spec: {}
