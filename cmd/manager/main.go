@@ -8,10 +8,10 @@ import (
 	"runtime"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
-	_ "k8s.io/client-go/plugin/pkg/client/auth"
-
 	"github.com/sohankunkerkar/onprem-operator/pkg/apis"
 	"github.com/sohankunkerkar/onprem-operator/pkg/controller"
+	operatorVersion "github.com/sohankunkerkar/onprem-operator/version"
+	_ "k8s.io/client-go/plugin/pkg/client/auth"
 
 	"github.com/operator-framework/operator-sdk/pkg/k8sutil"
 	"github.com/operator-framework/operator-sdk/pkg/leader"
@@ -37,6 +37,12 @@ func printVersion() {
 	log.Info(fmt.Sprintf("Go Version: %s", runtime.Version()))
 	log.Info(fmt.Sprintf("Go OS/Arch: %s/%s", runtime.GOOS, runtime.GOARCH))
 	log.Info(fmt.Sprintf("Version of operator-sdk: %v", sdkVersion.Version))
+	log.Info(fmt.Sprintf("Operator Version: %v", operatorVersion.Version))
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Error(err, "Got an error when getting the working directory")
+	}
+	log.Info(fmt.Sprintf("Starting dir: %v", dir))
 }
 
 func main() {
