@@ -126,10 +126,6 @@ func (r *ReconcileHubCluster) install(instance *onpremv1alpha1.HubCluster) error
 		return err
 	}
 	log.Info("Install succeeded", "version", version.Version)
-	resources, err := mf.Parse(*filename, *recursive)
-	if err == nil {
-		log.Info("Parsed the resources again for the next reconcile from: ", "path", *filename)
-		r.config.Resources = resources
-	}
+
 	return nil
 }
