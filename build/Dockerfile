@@ -7,6 +7,8 @@ ENV OPERATOR=/usr/local/bin/onprem-operator \
 # install operator binary
 COPY build/_output/bin/onprem-operator ${OPERATOR}
 
+COPY deploy /deploy
+
 COPY build/bin /usr/local/bin
 RUN  /usr/local/bin/user_setup
 
