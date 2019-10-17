@@ -1,0 +1,101 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  name: clusteragents.clusteragent.onprem.openshift.io
+spec:
+  group: clusteragent.onprem.openshift.io
+  names:
+    kind: ClusterAgent
+    listKind: ClusterAgentList
+    plural: clusteragents
+    singular: clusteragent
+  scope: ""
+  validation:
+    openAPIV3Schema:
+      description: ClusterAgent is the Schema for the clusteragents API
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          description: ClusterAgentSpec defines the desired state of ClusterAgent
+          properties:
+            hubCluster:
+              description: 'INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
+                Important: Run "make" to regenerate code after modifying this file
+                The configuration used to build a kubeconfig to contact the hub cluster
+                API endpoint.'
+              properties:
+                apiEndpoint:
+                  description: The API endpoint of the member cluster. This can be
+                    a hostname, hostname:port, IP or IP:port.
+                  type: string
+              required:
+              - apiEndpoint
+              type: object
+            joinClusterRef:
+              description: The name and namespace for locating the cluster agent's
+                JoinedCluster resource in the hub cluster.
+              properties:
+                name:
+                  description: The name of the particular resource in question.
+                  maxLength: 253
+                  pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9]))*$
+                  type: string
+                namespace:
+                  description: The namespace where the particular resource is located.
+                  maxLength: 63
+                  pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+                  type: string
+              required:
+              - name
+              - namespace
+              type: object
+            secretRef:
+              description: The name and namespace for locating the secret that contains
+                the token and optional CA to access the hub cluster API.
+              properties:
+                name:
+                  description: The name of the particular resource in question.
+                  maxLength: 253
+                  pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9]))*$
+                  type: string
+                namespace:
+                  description: The namespace where the particular resource is located.
+                  maxLength: 63
+                  pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+                  type: string
+              required:
+              - name
+              - namespace
+              type: object
+          required:
+          - hubCluster
+          - joinClusterRef
+          - secretRef
+          type: object
+        status:
+          description: ClusterAgentStatus defines the observed state of ClusterAgent
+          type: object
+      type: object
+  version: v1alpha1
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
