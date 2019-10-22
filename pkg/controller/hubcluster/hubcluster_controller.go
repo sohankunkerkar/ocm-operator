@@ -3,12 +3,14 @@ package hubcluster
 import (
 	"context"
 	"flag"
+	"strings"
 
 	mf "github.com/jcrossley3/manifestival"
 	"github.com/operator-framework/operator-sdk/pkg/predicate"
 	onpremv1alpha1 "github.com/sohankunkerkar/onprem-operator/pkg/apis/onprem/v1alpha1"
 	"github.com/sohankunkerkar/onprem-operator/version"
 	"k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
@@ -108,11 +110,41 @@ func (r *ReconcileHubCluster) Reconcile(request reconcile.Request) (reconcile.Re
 	return reconcile.Result{}, nil
 }
 
+// This is a transform method that updates the namespace field of the clusterrolebinding/rolebinding resource
+func resourceNamespaceUpdate(ns, name string) mf.Transformer {
+	return func(u *unstructured.Unstructured) error {
+		reqLogger := log.WithValues("Instance.Namespace", ns, "Instance.Name", name)
+		kind := strings.ToLower(u.GetKind())
+		if kind == "clusterrolebinding" || kind == "rolebinding" {
+			if subjects, ok, _ := unstructured.NestedSlice(u.Object, "subjects"); ok {
+				if subjectKind, ok, err := unstructured.NestedString(subjects[0].(map[string]interface{}), "kind"); ok && subjectKind == "ServiceAccount" {
+					err = unstructured.SetNestedField(subjects[0].(map[string]interface{}), ns, "namespace")
+					if err != nil {
+						reqLogger.Info("Failed to set the namespace nested field")
+					} else {
+						reqLogger.Info("Added the namespace to the clusterrolebinding subjects element")
+						err = unstructured.SetNestedSlice(u.Object, subjects, "subjects")
+						if err != nil {
+							reqLogger.Info("Failed to update the subjects slice")
+						}
+					}
+				} else {
+					reqLogger.Info("Failed to get the kind of the subject or the kind is not of interest")
+				}
+			} else {
+				reqLogger.Info("Failed to get subjects slice")
+			}
+		}
+		return nil
+	}
+}
+
 // Apply the embedded resources
 func (r *ReconcileHubCluster) install(instance *onpremv1alpha1.HubCluster) error {
 	// Transform resources as appropriate
 	fns := []mf.Transformer{mf.InjectOwner(instance)}
 	fns = append(fns, mf.InjectNamespace(instance.Namespace))
+	fns = append(fns, resourceNamespaceUpdate(instance.Namespace, instance.Name))
 	r.config.Transform(fns...)
 
 	// Apply the resources in the YAML file
