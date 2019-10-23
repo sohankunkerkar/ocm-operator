@@ -139,12 +139,33 @@ func resourceNamespaceUpdate(ns, name string) mf.Transformer {
 	}
 }
 
+func overWriteNamespace(ns, name string) mf.Transformer {
+	return func(u *unstructured.Unstructured) error {
+		reqLogger := log.WithValues("Instance.Namespace", ns, "Instance.Name", name)
+		kind := strings.ToLower(u.GetKind())
+		label := u.GetLabels()
+		var res string = label["resource"]
+		if (kind == "namespace") && (res == "joinedcluster") {
+			if metadata, ok, err := unstructured.NestedSlice(u.Object, "metadata"); ok {
+				err = unstructured.SetNestedField(metadata[0].(map[string]interface{}), "onprem-hub-system", "name")
+				if err != nil {
+					reqLogger.Info("Failed to set the name nested field")
+				} else {
+					reqLogger.Info("Added the name to the metadata element")
+				}
+			}
+		}
+		return nil
+	}
+}
+
 // Apply the embedded resources
 func (r *ReconcileHubCluster) install(instance *onpremv1alpha1.HubCluster) error {
 	// Transform resources as appropriate
 	fns := []mf.Transformer{mf.InjectOwner(instance)}
 	fns = append(fns, mf.InjectNamespace(instance.Namespace))
 	fns = append(fns, resourceNamespaceUpdate(instance.Namespace, instance.Name))
+	fns = append(fns, overWriteNamespace(instance.Namespace, instance.Name))
 	r.config.Transform(fns...)
 
 	// Apply the resources in the YAML file
