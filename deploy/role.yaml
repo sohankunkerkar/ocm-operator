@@ -92,6 +92,7 @@ rules:
   - get
   - watch
   - list
+  - create
 - apiGroups:
   - ""
   resources:

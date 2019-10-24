@@ -139,12 +139,28 @@ func resourceNamespaceUpdate(ns, name string) mf.Transformer {
 	}
 }
 
+func overWriteNamespace(ns, name string) mf.Transformer {
+	return func(u *unstructured.Unstructured) error {
+		reqLogger := log.WithValues("Instance.Namespace", ns, "Instance.Name", name)
+		kind := strings.ToLower(u.GetKind())
+		label := u.GetLabels()
+		var res string = label["resource"]
+		if (kind == "namespace") && (res == "joinedcluster") {
+			reqLogger.Info("Updating the namespace to onprem-hub-system")
+			u.SetNamespace("onprem-hub-system")
+			u.SetName("onprem-hub-system")
+		}
+		return nil
+	}
+}
+
 // Apply the embedded resources
 func (r *ReconcileHubCluster) install(instance *onpremv1alpha1.HubCluster) error {
 	// Transform resources as appropriate
 	fns := []mf.Transformer{mf.InjectOwner(instance)}
 	fns = append(fns, mf.InjectNamespace(instance.Namespace))
 	fns = append(fns, resourceNamespaceUpdate(instance.Namespace, instance.Name))
+	fns = append(fns, overWriteNamespace(instance.Namespace, instance.Name))
 	r.config.Transform(fns...)
 
 	// Apply the resources in the YAML file
