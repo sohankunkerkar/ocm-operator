@@ -146,14 +146,9 @@ func overWriteNamespace(ns, name string) mf.Transformer {
 		label := u.GetLabels()
 		var res string = label["resource"]
 		if (kind == "namespace") && (res == "joinedcluster") {
-			if metadata, ok, err := unstructured.NestedSlice(u.Object, "metadata"); ok {
-				err = unstructured.SetNestedField(metadata[0].(map[string]interface{}), "onprem-hub-system", "name")
-				if err != nil {
-					reqLogger.Info("Failed to set the name nested field")
-				} else {
-					reqLogger.Info("Added the name to the metadata element")
-				}
-			}
+			reqLogger.Info("Updating the namespace to onprem-hub-system")
+			u.SetNamespace("onprem-hub-system")
+			u.SetName("onprem-hub-system")
 		}
 		return nil
 	}
