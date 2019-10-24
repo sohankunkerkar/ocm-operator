@@ -147,7 +147,6 @@ func overWriteNamespace(ns, name string) mf.Transformer {
 		var res string = label["resource"]
 		if (kind == "namespace") && (res == "joinedcluster") {
 			reqLogger.Info("Updating the namespace to onprem-hub-system")
-			u.SetNamespace("onprem-hub-system")
 			u.SetName("onprem-hub-system")
 		}
 		return nil
